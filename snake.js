@@ -6,6 +6,14 @@ Youtube channel : https://www.youtube.com/channel/UC8n8ftV94ZU_DJLOLtrpORA
 const cvs = document.getElementById("snake");
 const ctx = cvs.getContext("2d");
 
+const dead = new Audio();
+dead.src = "audio/dead.mp3"
+const eat = new Audio();
+eat.src = "audio/eat.mp3"
+const up = new Audio();
+up.src = "audio/up.mp3"
+
+
 const box = 32;
 
 const ground = new Image();
@@ -31,12 +39,16 @@ document.addEventListener('keydown', direction);
 let d;
 function direction(event){
     if(event.keyCode == 37 && d != "RIGHT"){
+        up.play();
         d = "LEFT";
     }else if(event.keyCode == 38 && d != "DOWN"){
+        up.play();
         d = "UP";
     }else if(event.keyCode == 39 && d != "LEFT"){
+        up.play();
         d = "RIGHT";
     }else if(event.keyCode == 40 && d != "UP"){
+        up.play();
         d = "DOWN";
     }
 }
@@ -46,7 +58,7 @@ function direction(event){
 function draw(){
     ctx.drawImage(ground,0,0);
     for(let i= 0; i<snake.length; i++){
-        ctx.fillStyle = (i ==0)? "green" : "white";
+        ctx.fillStyle = (i ==0)? "black" : "black";
         ctx.fillRect(snake[i].x,snake[i].y,box,box);
         ctx.strokeStyle = "white";
         ctx.strokeRect(snake[i].x,snake[i].y,box,box);
@@ -59,6 +71,7 @@ function draw(){
 
     if(snakeX == food.x && snakeY == food.y){
         score ++;
+        eat.play();
         food = {
             x : Math.floor(Math.random()*17+1) * box,
             y : Math.floor(Math.random()*15+3) * box,
@@ -82,6 +95,7 @@ function draw(){
     }
 
     if(snakeX < box || snakeX > 17*box || snakeY < 3 *box || snakeY > 17* box || collision(newHead, snake)){
+        dead.play();
         clearInterval(game);
     }
     
